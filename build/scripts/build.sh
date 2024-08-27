@@ -55,12 +55,12 @@ _make_bin_folders() {
 }
 
 _update_ui_folders() {
-  docker image build -t site -f ${_build_dir}/docker/ui.Dockerfile ${_root_dir}
+  docker image build -t ui-update -f ${_build_dir}/docker/ui.Dockerfile ${_root_dir}
 
   for _o in ${_os}; do
     _arch=_${_o}_arch
     for _a in ${!_arch}; do
-      docker run --rm -v "${_bin_dir}/${_o}/${_a}/html":"/webkins_ui/mnt" ui
+      docker run --rm -v "${_bin_dir}/${_o}/${_a}/html":"/webkins_ui/mnt" ui-update
     done
   done
 }
@@ -163,6 +163,7 @@ _unit_test=
 _coverage=
 
 _service_op=
+_service_args=
 
 while [ $# -gt 0 ]; do
   _op=$1
@@ -203,6 +204,7 @@ while [ $# -gt 0 ]; do
       ;;
     up|start)
       _service_op=up
+      _service_args="-d"
       shift
       ;;
     down|stop)
@@ -231,6 +233,6 @@ done
 [ -n "${_ui}" ] && build_ui
 [ -n "${_unit_test}" ] && run_unit_tests
 
-[ -n "${_service_op}" ] && exec_service
+[ -n "${_service_op}" ] && exec_service ${_service_args}
 
 exit 0
