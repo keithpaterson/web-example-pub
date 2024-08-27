@@ -23,6 +23,9 @@ _show_usage() {
   echo "build clean"
   echo "   clean the bin folder"
   echo
+  echo "up|down"
+  echo "   start/stop the service"
+  echo
   echo "use --dry-run to check what will happen"
 }
 
@@ -42,6 +45,7 @@ _show_info() {
   [ -n "${_service}" ] && echo "build service"
   [ -n "${_ui}" ] && echo "build UI"
   [ -n "${_ui_update}" ] && echo "      and update the docker container"
+  [ -n "${_service_op}" ] && echo "service operation: ${_service_op}"
   echo
 }
 
