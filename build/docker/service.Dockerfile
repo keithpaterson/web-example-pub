@@ -10,7 +10,6 @@ COPY go.mod .
 COPY go.sum .
 COPY service/ ./service/
 COPY ui/ ./ui/
-COPY build/scripts ./build/scripts
 COPY build/build.sh ./build/build.sh
 RUN mkdir -p -m 0700 ~/.ssh && ssh-keyscan github.com >> ~/.ssh/known_hosts
 
