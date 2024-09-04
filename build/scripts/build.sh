@@ -115,6 +115,8 @@ _service_container=
 _ui=
 _ui_update=
 
+_service_op=
+
 while [ $# -gt 0 ]; do
   case $1 in
     -h|--help)
@@ -136,6 +138,14 @@ while [ $# -gt 0 ]; do
     all)
       _service=true
       _ui=true
+      shift
+      ;;
+    up|start)
+      _service_op=up
+      shift
+      ;;
+    down|stop)
+      _service_op=down
       shift
       ;;
     -u|update-ui)
@@ -160,5 +170,7 @@ done
 
 [ -n "${_service}" ] && build_service
 [ -n "${_ui}" ] && build_ui
+
+[ -n "${_service_op}" ] && exec_service
 
 exit 0
