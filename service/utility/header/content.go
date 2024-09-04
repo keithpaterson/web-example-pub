@@ -11,4 +11,5 @@ const (
 const (
 	MimeTypeBinary = "application/octet-stream"
 	MimeTypeJson   = "application/json"
+	MimeTypeText   = "text/plain"
 )
