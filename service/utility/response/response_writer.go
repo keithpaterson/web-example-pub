@@ -15,6 +15,10 @@ func NewWriter(w http.ResponseWriter) Writer {
 	return Writer{writer: w}
 }
 
+func (w Writer) HttpResponseWriter() http.ResponseWriter {
+	return w.writer
+}
+
 func (w Writer) WriteResponse(statusCode int) {
 	w.writer.WriteHeader(statusCode)
 }
