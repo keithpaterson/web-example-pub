@@ -33,6 +33,10 @@ deploy_service() {
   kubectl cluster-info
   #kubectl create deployment webkins-svc --image=webkins
   kubectl apply -f ${_deploy_dir}/k8s/webkins.yaml
+
+  local _kube_port=$(kubectl describe svc nginx-ingress --namespace=nginx-ingress | grep NodePort | grep "http " | cut -w -f 3 | cut -d '/' -f 1)
+  echo "Open the website using this url:"
+  echo "  http://localhost:${_kube_port}"
 }
 
 remove_service() {
