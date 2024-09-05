@@ -3,6 +3,8 @@ import { library } from '@fortawesome/fontawesome-svg-core';
 import { fas } from '@fortawesome/free-solid-svg-icons';
 import {useState} from "react";
 
+const bodkin_svc='http://localhost:' + import.meta.env.VITE_SVC_PORT + '/bodkins'
+
 export interface Bodkin {
     id: number;
     name: string;
@@ -67,10 +69,12 @@ export function Bodkins() {
             .catch(error => console.log(error));
         setName('')
         listBodkins()
+            .catch(error => console.log(error));
     }
 
     function createBodkin(bodkin: Bodkin): Promise<string> {
-        return fetch('http://localhost:32754/bodkins', {
+        console.log('Create: fetching' + bodkin_svc)
+        return fetch(bodkin_svc, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json;charset=UTF-8',
@@ -88,7 +92,8 @@ export function Bodkins() {
     }
       
     function listBodkins(): Promise<Bodkin[]> {
-        return fetch('http://localhost:32754/bodkins', {
+        console.log('List: fetching' + bodkin_svc)
+        return fetch(bodkin_svc, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json;charset=UTF-8',
