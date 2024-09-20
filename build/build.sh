@@ -125,8 +125,23 @@ _build_react_ui() {
 _build_angular_ui() {
   cd ${_ui_dir}/angular
 
-  echo "TODO: build angular UI"
-  exit 1
+  if ! command -v node > /dev/null 2>&1; then
+    echo "ERROR: node is missing"
+    return 2
+  fi
+  if ! command -v ng > /dev/null 2>&1; then
+    echo "ERROR: angular is missing"
+    return 2
+  fi
+
+  npm install --ignore-scripts
+  ng build
+
+  if [ -n "${_ui_update}" ]; then
+    # _update_ui_folders
+    echo "ERROR: UI update is not supported"
+    return 1
+  fi
 }
 
 run_unit_tests() {
