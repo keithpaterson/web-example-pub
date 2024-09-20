@@ -8,6 +8,7 @@ _test_report_dir=${_root_dir}/.reports
 _compose_dir=${_deploy_dir}/docker-compose
 _service_dir=${_root_dir}/service
 _ui_dir=${_root_dir}/ui
+_ui_framework=react
 _bin_dir=${_root_dir}/bin
 
 _os="darwin linux"
@@ -32,7 +33,7 @@ _show_info() {
   echo "Script   : ${_script_dir}"
   echo "Root     : ${_root_dir}"
   echo "Service  : ${_service_dir}"
-  echo "UI       : ${_ui_dir}"
+  echo "UI       : ${_ui_dir}/${_ui_framework}"
   echo "Bin      : ${_bin_dir}"
   for _o in ${_os}; do
     _arch=_${_o}_arch
@@ -69,13 +70,15 @@ build_service() {
 
   _make_bin_folders
 
+  local _build_tags=${_ui_framework}_ui
+
   # no version for now
   cd ${_service_dir}
   for _o in ${_os}; do
     _arch=_${_o}_arch
     for _a in ${!_arch}; do
       echo "build service (${_o}/${_a})"
-      GOOS=${_o} GOARCH=${_a} go build -o ${_bin_dir}/${_o}/${_a}/service ./entry/service/main.go
+      GOOS=${_o} GOARCH=${_a} go build -tags ${_build_tags} -o ${_bin_dir}/${_o}/${_a}/service ./entry/service/main.go
     done
   done
 }
@@ -83,13 +86,29 @@ build_service() {
 build_service_container() {
   local _access="--ssh default"
 
-  docker-compose -f ${_compose_dir}/service.yaml build --no-cache ${_access}
+  docker-compose -f ${_compose_dir}/service-${_ui_framework}.yaml build --no-cache ${_access}
 }
 
 build_ui() {
   _make_bin_folders html
 
-  cd ${_ui_dir}
+  case $_ui_framework in 
+    vite|react)
+      _build_react_ui react
+      ;;
+    angular)
+      _build_angular_ui angular
+      ;;
+    *)
+      echo "ERROR: Unrecognized UI framework '$_ui_framework'"
+      exit 1
+      ;;
+  esac
+}
+
+_build_react_ui() {
+  cd ${_ui_dir}/$1
+
   if ! command -v node > /dev/null 2>&1; then
     echo "ERROR: node is missing"
     return 2
@@ -101,6 +120,13 @@ build_ui() {
   if [ -n "${_ui_update}" ]; then
     _update_ui_folders
   fi
+}
+
+_build_angular_ui() {
+  cd ${_ui_dir}/angular
+
+  echo "TODO: build angular UI"
+  exit 1
 }
 
 run_unit_tests() {
@@ -197,6 +223,9 @@ while [ $# -gt 0 ]; do
     -d|--docker|container)
       _service_container=true
       ;;
+    -f|--framework|--ui-framework)
+      _ui_framework=$1
+      shift;;
     --dry-run)
       _show_info
       exit 0

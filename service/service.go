@@ -6,8 +6,11 @@ import (
 	"webkins/service/bodkins"
 	"webkins/service/logger"
 	"webkins/service/utility/response"
-	"webkins/ui"
 )
+
+type Handler interface {
+	HandleRequest(writer response.Writer, r *http.Request)
+}
 
 type Service struct {
 	logger.LogWrapper
@@ -15,8 +18,8 @@ type Service struct {
 	port int
 
 	// handlers
-	ui      *ui.HtmlHandler
-	bodkins *bodkins.HtmlHandler
+	ui      Handler
+	bodkins Handler
 }
 
 func NewService(port int) *Service {
@@ -24,7 +27,7 @@ func NewService(port int) *Service {
 		LogWrapper: logger.NewLogWrapper("server"),
 		port:       port,
 
-		ui:      ui.NewHtmlHandler(),
+		ui:      NewUIHandler(),
 		bodkins: bodkins.NewHtmlHandler(),
 	}
 }

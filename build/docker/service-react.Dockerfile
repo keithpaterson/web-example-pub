@@ -28,7 +28,7 @@ RUN --mount=type=ssh go mod download && \
 FROM node:20-alpine AS uibuilder
 
 WORKDIR /webkins_ui
-COPY ui/ /webkins_ui
+COPY ui/react /webkins_ui
 RUN npm install --ignore-scripts && npm run build
 
 FROM scratch

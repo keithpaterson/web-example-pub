@@ -8,6 +8,7 @@ _test_report_dir=${_root_dir}/.reports
 _compose_dir=${_deploy_dir}/docker-compose
 _service_dir=${_root_dir}/service
 _ui_dir=${_root_dir}/ui
+_ui_framework=react
 
 _show_usage() {
   echo "deploy.sh [--remove]"
@@ -21,7 +22,7 @@ _show_info() {
   echo "Script   : ${_script_dir}"
   echo "Root     : ${_root_dir}"
   echo "Service  : ${_service_dir}"
-  echo "UI       : ${_ui_dir}"
+  echo "UI       : ${_ui_dir}/${_ui_framework}"
   echo
   [ -n "${_remove}" ] && echo "remove service" || echo "deploy service"
   echo
@@ -57,6 +58,10 @@ while [ $# -gt 0 ]; do
       ;;
     -r|--delete|--remove)
       _remove=true
+      ;;
+    -u|--ui|--ui-framework)
+      _ui_framework=$1
+      shift
       ;;
     --dry-run)
       _show_info
