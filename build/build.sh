@@ -70,15 +70,13 @@ build_service() {
 
   _make_bin_folders
 
-  local _build_tags=${_ui_framework}_ui
-
   # no version for now
   cd ${_service_dir}
   for _o in ${_os}; do
     _arch=_${_o}_arch
     for _a in ${!_arch}; do
       echo "build service (${_o}/${_a})"
-      GOOS=${_o} GOARCH=${_a} go build -tags ${_build_tags} -o ${_bin_dir}/${_o}/${_a}/service ./entry/service/main.go
+      GOOS=${_o} GOARCH=${_a} go build -o ${_bin_dir}/${_o}/${_a}/service ./entry/service/main.go
     done
   done
 }
