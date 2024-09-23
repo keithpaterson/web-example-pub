@@ -82,6 +82,8 @@ build_service() {
 }
 
 build_service_container() {
+  echo "Build service (${_ui_framework}) in a container"
+
   local _access="--ssh default"
 
   docker-compose -f ${_compose_dir}/service-${_ui_framework}.yaml build --no-cache ${_access}

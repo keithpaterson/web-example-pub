@@ -17,7 +17,7 @@ export class BodkinsService {
     })
   }
   // TODO: figure out the right port number
-  baseUrl = 'http://localhost:3000/bodkins'
+  baseUrl = 'http://localhost:8080/bodkins'
 
   postBodkin(bodkin: Bodkin) {
     let url = this.baseUrl
