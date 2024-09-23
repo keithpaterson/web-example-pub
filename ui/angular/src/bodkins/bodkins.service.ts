@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Bodkin } from "./bodkin";
-import { Observable, of } from "rxjs";
-import {catchError, tap, map} from 'rxjs/operators'
+//import { Observable, of } from "rxjs";
+//import {catchError, tap, map} from 'rxjs/operators'
 
 @Injectable({
   providedIn: 'root'
@@ -30,10 +30,12 @@ export class BodkinsService {
 
   listBodkins(): Bodkin[] {
     let url = this.baseUrl
-    return this.http.get(url, this.httpOptions).subscribe({
-      next: (v) => {console.info("${v}")},
+    let bodkins: Bodkin[] = [];
+    this.http.get(url, this.httpOptions).subscribe({
+      next: (v) => {console.info("${v}"); /* TODO: capture the array */},
       error: (e) => console.error(e),
       complete: () => console.info("list complete"),
-    })
+    });
+    return bodkins;
   }
 }

@@ -4,13 +4,13 @@ import {Router} from '@angular/router'
 import {Bodkin} from "./bodkin"
 
 @Component({
-  selector: 'app-bodkins',
+  selector: 'app-bodkins-create',
   standalone: true,
   imports: [],
-  templateUrl: './bodkins.component.html',
-  styleUrl: './bodkins.component.css'
+  templateUrl: './bodkins-create.component.html',
+  styleUrl: './bodkins-create.component.css'
 })
-export class BodkinsComponent implements OnInit {
+export class BodkinsCreateComponent implements OnInit {
 
   name = ''
 
@@ -19,6 +19,7 @@ export class BodkinsComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  // doesn't seem right.. but maybe
   createBodkin() {
     // id is required but for create it will get ignored.
     let bodkin = {id: 0, name: this.name}
