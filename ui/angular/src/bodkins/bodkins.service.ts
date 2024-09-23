@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Bodkin } from "./bodkin";
+import { environment } from "../environment/environment"
 //import { Observable, of } from "rxjs";
 //import {catchError, tap, map} from 'rxjs/operators'
 
@@ -16,10 +17,11 @@ export class BodkinsService {
       'Content-Type': 'application/json'
     })
   }
-  // TODO: figure out the right port number
-  baseUrl = 'http://localhost:8080/bodkins'
+
+  baseUrl = 'http://localhost:' + environment.bodkinsPort + '/bodkins'
 
   postBodkin(bodkin: Bodkin) {
+    console.log("post new bodkin at port " + environment.bodkinsPort)
     let url = this.baseUrl
     return this.http.post(url, bodkin, this.httpOptions).subscribe({
       next: (added) => {console.info("added: ${added}"); window.alert("Added (${added.id})!")},
@@ -29,10 +31,11 @@ export class BodkinsService {
   }
 
   listBodkins(): Bodkin[] {
+    console.log("list bodkin at port " + environment.bodkinsPort)
     let url = this.baseUrl
     let bodkins: Bodkin[] = [];
     this.http.get(url, this.httpOptions).subscribe({
-      next: (v) => {console.info("${v}"); /* TODO: capture the array */},
+      next: (v) => {console.info(v); /* TODO: capture the array */},
       error: (e) => console.error(e),
       complete: () => console.info("list complete"),
     });
