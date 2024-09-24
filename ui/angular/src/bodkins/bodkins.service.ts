@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Bodkin } from "./bodkin";
 import { environment } from "../environment/environment"
+import { Observable } from 'rxjs';
 //import { Observable, of } from "rxjs";
 //import {catchError, tap, map} from 'rxjs/operators'
 
@@ -12,33 +13,42 @@ export class BodkinsService {
 
   constructor(private http: HttpClient) { }
 
-  httpOptions = {
+  private httpOptions = {
     headers: new HttpHeaders({
       'Content-Type': 'application/json'
     })
   }
 
-  baseUrl = 'http://localhost:' + environment.bodkinsPort + '/bodkins'
+  private baseUrl = 'http://localhost:' + environment.bodkinsPort + '/bodkins'
 
-  postBodkin(bodkin: Bodkin) {
+  postBodkin(bodkin: Bodkin): Observable<Object> {
     console.log("post new bodkin at port " + environment.bodkinsPort)
     let url = this.baseUrl
-    return this.http.post(url, bodkin, this.httpOptions).subscribe({
-      next: (added) => {console.info("added: ${added}"); window.alert("Added (${added.id})!")},
+    return this.http.post(url, bodkin, this.httpOptions);
+    /*
+    let added: Bodkin = {id: -1, name: ''};
+    this.http.post(url, bodkin, this.httpOptions).subscribe({
+      next: (v) => {added = v as Bodkin; console.info("added: ${v}"); window.alert("Added (${added.id})!");},
       error: (e) => console.error(e),
       complete: () => console.info("create complete"),
     });
+    return added;
+    */
   }
 
-  listBodkins(): Bodkin[] {
+  listBodkins(): Observable<Object> {
     console.log("list bodkin at port " + environment.bodkinsPort)
-    let url = this.baseUrl
+    let url = this.baseUrl;
+    return this.http.get(url, this.httpOptions);
+    /*
     let bodkins: Bodkin[] = [];
     this.http.get(url, this.httpOptions).subscribe({
-      next: (v) => {console.info(v); /* TODO: capture the array */},
+      next: (v) => {bodkins = v as Bodkin[]; console.info("next: " + v + " (" + bodkins + ")");},
       error: (e) => console.error(e),
-      complete: () => console.info("list complete"),
+      complete: () => console.info("list complete (" + bodkins + ")"),
     });
+    console.info("returning: " + bodkins);
     return bodkins;
+    */
   }
 }

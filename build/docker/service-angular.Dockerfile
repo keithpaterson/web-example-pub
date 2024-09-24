@@ -1,4 +1,5 @@
 ARG GO_VERSION=1.22
+ARG BUILD_CONFIG
 FROM golang:${GO_VERSION} AS builder
 ENV GOPRIVATE=github.com/agilitree
 ENV CGO_ENABLED=0
@@ -31,7 +32,14 @@ WORKDIR /webkins_ui
 COPY ui/angular /webkins_ui
 RUN npm install --ignore-scripts
 RUN npm install -g @angular/cli
-RUN ng build
+ENV _CONFIG=
+RUN if [ -n "$BUILD_CONFIG" ]; then \
+        echo "build with configuration = $BUILD_CONFIG"; \
+        ng build --configuration $BUILD_CONFIG; \
+    else \
+        echo "build with default configuration"; \
+        ng build; \
+    fi
 
 FROM scratch
 

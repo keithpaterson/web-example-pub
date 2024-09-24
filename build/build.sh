@@ -10,6 +10,7 @@ _service_dir=${_root_dir}/service
 _ui_dir=${_root_dir}/ui
 _ui_framework=react
 _bin_dir=${_root_dir}/bin
+_build_config=
 
 _os="darwin linux"
 _darwin_arch="amd64"
@@ -46,6 +47,10 @@ _show_info() {
   [ -n "${_service_container}" ] && echo "      in a docker container"
   [ -n "${_ui}" ] && echo "build UI"
   [ -n "${_service_op}" ] && echo "service operation: ${_service_op}"
+  echo
+  echo "build arguments:"
+  [ -n $"{_ui_framework}" ] && echo "     fw: ${_ui_framework}"
+  [ -n $"{_build_config}" ] && echo "     cfg: ${_build_config}"
   echo
 }
 
@@ -134,8 +139,11 @@ _build_angular_ui() {
     return 2
   fi
 
+  local _config=
+  [ -n "${_build_config}" ] && _config="--configuration ${_build_config}"
+
   npm install --ignore-scripts
-  ng build
+  ng build ${_config}
 
   if [ -n "${_ui_update}" ]; then
     # _update_ui_folders
@@ -241,6 +249,10 @@ while [ $# -gt 0 ]; do
     -f|--framework|--ui-framework)
       _ui_framework=$1
       shift;;
+    -c|--config|--configuration)
+      _build_config=$1
+      shift
+      ;;
     --dry-run)
       _show_info
       exit 0

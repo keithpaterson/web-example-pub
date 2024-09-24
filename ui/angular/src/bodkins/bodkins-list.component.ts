@@ -2,27 +2,35 @@ import { Component, OnInit } from '@angular/core';
 import { BodkinsService } from './bodkins.service'
 import { Router } from '@angular/router'
 import { Bodkin } from "./bodkin"
-import { NgFor } from '@angular/common';
+import { CommonModule, NgFor } from '@angular/common';
+import { BodkinsChangedService } from './bodkins-changed.service';
 
 @Component({
   selector: 'app-bodkins-list',
   standalone: true,
-  imports: [NgFor],
+  imports: [CommonModule, NgFor],
   templateUrl: './bodkins-list.component.html',
-  styleUrl: './bodkins-list.component.css'
+  styleUrl: './bodkins-list.component.css',
 })
-export class BodkinsListComponent {
+export class BodkinsListComponent implements OnInit {
   bodkins: Bodkin[] = [];
   
-  constructor(private service: BodkinsService, private router: Router) {
-    this.listBodkins()
+  constructor(private service: BodkinsService, private router: Router, private changed: BodkinsChangedService) {
+    this.changed.data$.subscribe(id => this.listBodkins());
   }
 
   ngOnInit(): void {
-    this.listBodkins()
+    this.listBodkins();
   }
 
   listBodkins() {
-    this.bodkins = this.service.listBodkins()
+    console.log("start list bodkins from component: " + this)
+    this.service.listBodkins().subscribe({
+        //next: (v) => {this.bodkins = v as Bodkin[]; console.info("next: " + v + " (" + this.bodkins + ")");},
+        next: (v) => {this.bodkins = [...v as Bodkin[]]; console.info("next: " + v);},
+        error: (e) => console.error(e),
+        complete: () => console.info("list complete (" + this.bodkins + ")"),
+    });
+    //console.info("list: listBodkins: " + this.bodkins.length + " : " + this.bodkins);
   }
 }
