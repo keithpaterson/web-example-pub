@@ -36,7 +36,7 @@ func (hh *HtmlHandler) HandleRequest(writer response.Writer, r *http.Request) {
 	}
 }
 
-func (hh *HtmlHandler) list(writer response.Writer, req *http.Request) {
+func (hh *HtmlHandler) list(writer response.Writer, _ *http.Request) {
 	hh.mtx.Lock()
 	defer hh.mtx.Unlock()
 
