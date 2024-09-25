@@ -24,13 +24,12 @@ export class BodkinsCreateComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  // doesn't seem right.. but maybe
   createBodkin() {
     this.bodkin.id = -1; // force a reset; don't assume the server actually ignores this value
     this.service.postBodkin(this.bodkin).subscribe({
-      next: (v) => {this.bodkin.name=''; console.info("added: " + this.bodkin);},
+      next: (v) => {console.info("added: " + this.bodkin);},
       error: (e) => console.error(e),
-      complete: () => {console.info("create complete"); this.changed.bodkinChanged(this.bodkin.id)},
+      complete: () => {console.info("create complete"); this.bodkin.name=''; this.changed.bodkinChanged(this.bodkin.id)},
     });
   }
 

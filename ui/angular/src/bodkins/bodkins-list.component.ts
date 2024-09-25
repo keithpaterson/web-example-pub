@@ -26,11 +26,9 @@ export class BodkinsListComponent implements OnInit {
   listBodkins() {
     console.log("start list bodkins from component: " + this)
     this.service.listBodkins().subscribe({
-        //next: (v) => {this.bodkins = v as Bodkin[]; console.info("next: " + v + " (" + this.bodkins + ")");},
         next: (v) => {this.bodkins = [...v as Bodkin[]]; console.info("next: " + v);},
         error: (e) => console.error(e),
         complete: () => console.info("list complete (" + this.bodkins + ")"),
     });
-    //console.info("list: listBodkins: " + this.bodkins.length + " : " + this.bodkins);
   }
 }
